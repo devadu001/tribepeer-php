@@ -6,13 +6,7 @@ PHP client for TribePeer — e-campus, organisation training, e-library, and AI-
 composer require tribepeer/sdk
 ```
 
-Until Packagist is live, point Composer at this repo:
-
-```json
-{
-  "repositories": [{ "type": "vcs", "url": "https://github.com/devadu001/tribepeer-php" }]
-}
-```
+Packagist: [https://packagist.org/packages/tribepeer/sdk](https://packagist.org/packages/tribepeer/sdk)
 
 ## Keys
 
