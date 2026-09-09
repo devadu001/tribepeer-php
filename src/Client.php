@@ -7,7 +7,10 @@ use GuzzleHttp\Exception\GuzzleException;
 use TribePeer\Exceptions\PaymentRequiredException;
 use TribePeer\Exceptions\TribePeerException;
 use TribePeer\Resources\Ai;
+use TribePeer\Resources\Campus;
+use TribePeer\Resources\Communities;
 use TribePeer\Resources\Materials;
+use TribePeer\Resources\Submissions;
 use TribePeer\Resources\Tribes;
 use TribePeer\Resources\Users;
 
@@ -24,12 +27,23 @@ class Client
         private readonly string $clientSecret,
         private readonly string $partnerBase = 'https://tribepeer.com/api/partner/v1',
         private readonly string $productBase = 'https://tribepeer.com/api/product/v1',
+        private readonly ?string $institutionUuid = null,
         ?Guzzle $http = null,
     ) {
         $this->http = $http ?? new Guzzle([
             'http_errors' => false,
             'timeout' => 30,
         ]);
+    }
+
+    public function productBase(): string
+    {
+        return rtrim($this->productBase, '/');
+    }
+
+    public function institutionUuid(): ?string
+    {
+        return $this->institutionUuid;
     }
 
     /**
@@ -121,6 +135,21 @@ class Client
         return new Users($this);
     }
 
+    public function campus(): Campus
+    {
+        return new Campus($this);
+    }
+
+    public function submissions(): Submissions
+    {
+        return new Submissions($this);
+    }
+
+    public function communities(): Communities
+    {
+        return new Communities($this);
+    }
+
     /**
      * @param  array<string, mixed>|null  $body
      * @return array<string, mixed>
@@ -128,6 +157,24 @@ class Client
     public function partnerRequest(string $method, string $path, ?array $body = null): array
     {
         return $this->partner($method, $path, $body);
+    }
+
+    /**
+     * @param  array<string, mixed>|null  $body
+     * @return array<string, mixed>
+     */
+    public function productRequest(string $method, string $path, ?array $body = null): array
+    {
+        return $this->request($method, $this->productBase().$path, $body, $this->userAccessToken());
+    }
+
+    /**
+     * @param  array<string, mixed>|null  $body
+     * @return array<string, mixed>
+     */
+    public function publicRequest(string $method, string $url, ?array $body = null): array
+    {
+        return $this->request($method, $url, $body);
     }
 
     /**
@@ -162,6 +209,9 @@ class Client
         $headers = ['Accept' => 'application/json'];
         if ($token) {
             $headers['Authorization'] = 'Bearer '.$token;
+        }
+        if ($this->institutionUuid) {
+            $headers['X-Institution-Uuid'] = $this->institutionUuid;
         }
 
         $options = ['headers' => $headers];
