@@ -1,0 +1,22 @@
+{
+  "name": "tribepeer/sdk",
+  "description": "TribePeer client for digital education — e-campus, training centres, e-library, and AI-powered learning. Server keys stay on the server.",
+  "type": "library",
+  "license": "MIT",
+  "homepage": "https://www.tribepeer.com/institutions/docs",
+  "keywords": ["lms", "e-campus", "digital-education", "training", "e-library", "ai-learning", "tribepeer"],
+  "support": {
+    "docs": "https://www.tribepeer.com/institutions/docs",
+    "issues": "https://www.tribepeer.com/institutions"
+  },
+  "require": {
+    "php": "^8.1",
+    "guzzlehttp/guzzle": "^7.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "TribePeer\\": "src/"
+    }
+  },
+  "minimum-stability": "stable"
+}
